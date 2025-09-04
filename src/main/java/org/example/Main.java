@@ -35,6 +35,7 @@ public class Main {
             case 2 -> listarContato();
             case 3 -> buscarContatoPorNome();
             case 4 -> atualizarContato();
+            case 5 -> removerContato();
             case 6 -> sair = true;
             default -> System.out.println("Opção inválida!");
         }
@@ -147,6 +148,41 @@ public class Main {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    public static void removerContato(){
+        System.out.println("--REMOVER CONTATO");
+        List<Integer> idContatos = new ArrayList<>();
+        List<Contato> contatos = new ArrayList<>();
+        var dao = new ContatoDAO();
+
+        try{
+            contatos = dao.listarContatos();
+            idContatos = exibirContatos(contatos);
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        if (contatos.isEmpty()){
+            System.out.println("NENHUM CONTATO PARA REMOVER");
+            return ;
+        }
+
+        System.out.println("Digite o ID do contato que deseja remover: ");
+        int id = sc.nextInt();
+        sc.nextLine();
+
+        if(idContatos.contains(id)){
+            try{
+                dao.removerContato(id);
+                System.out.println("Contato removido com sucesso!");
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+        }else{
+            System.out.println("ID inválido!");
+            removerContato();
         }
     }
 }
